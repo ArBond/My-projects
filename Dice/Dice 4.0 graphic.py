@@ -24,22 +24,13 @@ pygame.display.set_caption("Dice 4.0")
 
 def goToStartScreen():
 
-    class SpritesOnStartScreen:
-        def __init__(self, xpos, ypos, filename):
-            self.x = xpos
-            self.y = ypos
-            self.bitmap = pygame.image.load(filename)
-            self.bitmap.set_colorkey((255, 255, 255))
-        def render(self):
-            startScreen.blit(self.bitmap, (self.x, self.y))
-
     startScreen = pygame.Surface((640, 480))
     stringWelcome = pygame.font.SysFont("Consolas", 50, True)
     stringPlayOne = pygame.font.SysFont("Consolas", 40)
     stringPlayWithCopmuter = pygame.font.SysFont("Consolas", 40)
     stringPlayWithFriend = pygame.font.SysFont("Consolas", 40)
     stringDescription = pygame.font.SysFont("Consolas", 20)
-    description = SpritesOnStartScreen(230, 350, "Описание игры.bmp")
+    buttonDescription = pygame.font.SysFont("Consolas", 20)
 
     greenOfStringPlayOne = 100
     greenOfStringPlayWithCopmuter = 100
@@ -435,7 +426,7 @@ def whenMoneyIsOut():
 
 
 
-'''  Погашение кредита       Погашение кредита      Погашение кредита      Погашение кредита     Погашение кредита  '''
+'''  Пора погасить долг     Пора погасить долг     Пора погасить долг     Пора погасить долг     Пора погасить долг '''
 
 
 def timeToPayCredit(gamerDeposit, needToPay):
@@ -527,7 +518,80 @@ def timeToPayCredit(gamerDeposit, needToPay):
         pygame.display.flip()
 
 
-timeToPayCredit(100, 200)
+
+
+
+'''Закончились деньги и не оплачен долг   Закончились деньги и не оплачен долг   Закончились деньги и не оплачен долг'''
+
+
+def whenMoneyIsOutAndYouHaveACredit():
+
+    hanaScreen = pygame.Surface((640, 480))
+
+    stringAllIsBad = pygame.font.SysFont("Consolas", 40, True)
+    stringYouCantRunOut = pygame.font.SysFont("Consolas", 25)
+    buttons = pygame.font.SysFont("Consolas", 35, True)
+    cuvaldaButton = pygame.font.SysFont("Consolas", 28, True)
+
+    redOfNoButton = 200
+    blueOfNoButton = 70
+    redOfCuvaldaButton = 200
+    blueOfCuvaldaButton = 70
+
+    canEscape = True
+
+    while True:
+
+        hanaScreen.fill((255, 225, 160))
+
+        hanaScreen.blit(stringAllIsBad.render("У вас закончились деньги.", 1, (0, 0, 255)), (55, 40))
+        hanaScreen.blit(stringAllIsBad.render("И на вас еще висит долг!", 1, (0, 0, 255)), (60, 90))
+
+        if canEscape == True:
+            hanaScreen.blit(buttons.render("Убежать", 1, (redOfNoButton, 0, blueOfNoButton)), (240, 300))
+        else:
+            hanaScreen.blit(stringYouCantRunOut.render("Вас догнали!", 1, (0, 0, 0)), (240, 360))
+            hanaScreen.blit(cuvaldaButton.render("Позвать КУВАЛДИНА!", 1, (redOfCuvaldaButton, 0, blueOfCuvaldaButton)),
+                            (187, 430))
+
+        for i in pygame.event.get():
+
+            if i.type == pygame.QUIT:
+                sys.exit()
+
+            mousePos = pygame.mouse.get_pos()
+
+            if mousePos[0] > 240 and mousePos[0] < 375 and mousePos[1] > 300 and mousePos[
+                1] < 333 and canEscape == True:
+                redOfNoButton = 255
+                blueOfNoButton = 0
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    if canEscape == True:
+                        canEscape = random.randint(0, 2)
+                        if canEscape == 1:
+                            return True
+                        else:
+                            canEscape = False
+            else:
+                redOfNoButton = 200
+                blueOfNoButton = 70
+
+            if mousePos[0] > 187 and mousePos[0] < 455 and mousePos[1] > 430 and mousePos[
+                1] < 455 and canEscape == False:
+                redOfCuvaldaButton = 255
+                blueOfCuvaldaButton = 0
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    canEscape = random.randint(0, 1)
+                    if canEscape == 1:
+                        return True
+                    else:
+                        return False
+            else:
+                redOfCuvaldaButton = 200
+                blueOfCuvaldaButton = 70
+
+        window.blit(hanaScreen, (0, 0))
+        pygame.display.flip()
 
 
 
@@ -740,11 +804,15 @@ def goToGameOneScreen(gamerDeposit):
                         greenOfRightRect = 0
                         lineWidthOfRightRect = 2
 
-        if gamerDeposit == 0 and timeCredit == 0:
-            gamerDeposit, timeCredit, needToPay = whenMoneyIsOut()
-            sum = 1
-            if gamerDeposit == 0:
-                break
+        if gamerDeposit == 0:
+            if timeCredit == 0:
+                gamerDeposit, timeCredit, needToPay = whenMoneyIsOut()
+                sum = 1
+                if gamerDeposit == 0:
+                    break
+            else:
+                return whenMoneyIsOutAndYouHaveACredit()
+
 
         if timeCredit == 1:
             gamerDeposit = timeToPayCredit(gamerDeposit, needToPay)
@@ -758,16 +826,58 @@ def goToGameOneScreen(gamerDeposit):
 
 
 
+'''    RIP Screen          RIP Screen          RIP Screen         RIP Screen        RIP Screen         RIP Screen    '''
+
+
+def ripScreen():
+
+    ripScreen = pygame.Surface((640, 480))
+
+    button = pygame.font.SysFont("Consolas", 30, True)
+
+    redOfButton = 200
+    blueOfButton = 70
+
+    while True:
+
+        ripScreen.blit(pygame.image.load("R.I.P. Screen.bmp"), (0, 0))
+
+        ripScreen.blit(button.render("Продолжить", 1, (redOfButton, 0, blueOfButton)), (235, 110))
+
+        for i in pygame.event.get():
+
+            if i.type == pygame.QUIT:
+                sys.exit()
+
+            mousePos = pygame.mouse.get_pos()
+            if mousePos[0] > 230 and mousePos[0] < 410 and mousePos[1] > 110 and mousePos[1] < 140:
+                redOfButton = 255
+                blueOfButton = 0
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    return
+            else:
+                redOfButton = 200
+                blueOfButton = 70
+
+        window.blit(ripScreen, (0, 0))
+        pygame.display.flip()
+
+
+
+
+
 
 '''   Н А Ч А Л О     Н А Ч А Л О     Н А Ч А Л О     Н А Ч А Л О     Н А Ч А Л О      Н А Ч А Л О     Н А Ч А Л О   '''
 
+while True:
+    selection = goToStartScreen()
 
-selection = goToStartScreen()
-
-if selection == 1:
-    gamerDeposit = goToEnterMoneyScreen(0)
-    goToGameOneScreen(gamerDeposit)
-elif selection == 2:
-    print("В разработке...")
-else:
-    print("В разработке...")
+    if selection == 1:
+        gamerDeposit = goToEnterMoneyScreen(0)
+        canRunOut = goToGameOneScreen(gamerDeposit)
+        if canRunOut == False:
+            ripScreen()
+    elif selection == 2:
+        print("В разработке...")
+    else:
+        print("В разработке...")
