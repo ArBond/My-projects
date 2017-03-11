@@ -25,71 +25,84 @@ pygame.display.set_caption("Dice 4.0")
 def goToStartScreen():
 
     startScreen = pygame.Surface((640, 480))
+
     stringWelcome = pygame.font.SysFont("Consolas", 50, True)
-    stringPlayOne = pygame.font.SysFont("Consolas", 40)
-    stringPlayWithCopmuter = pygame.font.SysFont("Consolas", 40)
-    stringPlayWithFriend = pygame.font.SysFont("Consolas", 40)
-    stringDescription = pygame.font.SysFont("Consolas", 20)
+
+    buttonPlayWithCopmuter = pygame.font.SysFont("Consolas", 40)
+    buttonPlayWithFriend = pygame.font.SysFont("Consolas", 40)
+    buttonPlayOne = pygame.font.SysFont("Consolas", 40)
+    buttonExit = pygame.font.SysFont("Consolas", 40)
     buttonDescription = pygame.font.SysFont("Consolas", 20)
 
-    greenOfStringPlayOne = 100
-    greenOfStringPlayWithCopmuter = 100
-    greenOfStringPlayWithFriend = 100
-    blueOfStringDescription = 100
+    greenOfButtonPlayOne = 100
+    greenOfButtonPlayWithCopmuter = 100
+    greenOfButtonPlayWithFriend = 100
+    greenOfButtonExit = 100
+
+    blueOfButtonDescription = 100
 
     while True:
 
-        startScreen.fill((255, 225, 160))
+        startScreen.blit(pygame.image.load("Images\Backgrounds\Start Screen.bmp"), (0, 0))
 
-        startScreen.blit(stringWelcome.render("Добро пожаловать в", 1, (255, 0, 0)), (80, 30))
-        startScreen.blit(stringWelcome.render("Кости 4.0", 1, (255, 0, 0)), (200, 80))
-        startScreen.blit(stringPlayOne.render("Играть одному", 1, (100, greenOfStringPlayOne, 255)), (170, 200))
-        startScreen.blit(stringPlayWithCopmuter.render("Играть против компьютера", 1,
-                                                       (100, greenOfStringPlayWithCopmuter, 255)), (50, 250))
-        startScreen.blit(stringPlayWithFriend.render("Играть с другом", 1,
-                                                     (100, greenOfStringPlayWithFriend, 255)), (150, 300))
-        startScreen.blit(stringDescription.render("Описание игры", 1,
-                                                  (100, 100, blueOfStringDescription)), (240, 455))
+        startScreen.blit(stringWelcome.render("Добро пожаловать!", 1, (255, 0, 0)), (100, 30))
+        startScreen.blit(buttonPlayWithCopmuter.render("Играть c компьютером", 1,
+                                                       (255, greenOfButtonPlayWithCopmuter, 255)), (167, 150))
+        startScreen.blit(buttonPlayWithFriend.render("Играть с другом", 1,
+                                                       (255, greenOfButtonPlayWithFriend, 255)), (275, 205))
+        startScreen.blit(buttonPlayOne.render("Играть одному", 1, (255, greenOfButtonPlayOne, 255)), (320, 260))
+        startScreen.blit(buttonExit.render("Выйти", 1,(255, greenOfButtonExit, 255)), (495, 335))
+
+        startScreen.blit(buttonDescription.render("Описание игры", 1, (180, 180, blueOfButtonDescription)), (240, 435))
 
         for i in pygame.event.get():
+
             if i.type == pygame.QUIT:
                 sys.exit()
 
             mousePos = pygame.mouse.get_pos()
 
-            '''обработка кнопки играть одному'''
-            if mousePos[0] > 170 and mousePos[0] < 455 and mousePos[1] > 200 and mousePos[1] < 240:
-                greenOfStringPlayOne = 0
+            '''обработка кнопки играть против компьютера'''
+            if mousePos[0] > 165 and mousePos[0] < 615 and mousePos[1] > 150 and mousePos[1] < 190:
+                greenOfButtonPlayWithCopmuter = 255
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
                     time.sleep(0.3)
                     return 1
             else:
-                greenOfStringPlayOne = 100
-
-            '''обработка кнопки играть против компьютера'''
-            if mousePos[0] > 50 and mousePos[0] < 580 and mousePos[1] > 250 and mousePos[1] < 290:
-                greenOfStringPlayWithCopmuter = 0
-                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
-                    time.sleep(0.3)
-                    print("В разработке...")
-            else:
-                greenOfStringPlayWithCopmuter = 100
+                greenOfButtonPlayWithCopmuter = 100
 
             '''обработка кнопки играть с другом'''
-            if mousePos[0] > 150 and mousePos[0] < 480 and mousePos[1] > 300 and mousePos[1] < 340:
-                greenOfStringPlayWithFriend = 0
+            if mousePos[0] > 270 and mousePos[0] < 615 and mousePos[1] > 205 and mousePos[1] < 245:
+                greenOfButtonPlayWithFriend = 255
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
-                    time.sleep(0.3)
                     print("В разработке...")
             else:
-                greenOfStringPlayWithFriend = 100
+                greenOfButtonPlayWithFriend = 100
 
-            '''обработка кнопки писание игры'''
-            if mousePos[0] > 240 and mousePos[0] < 380 and mousePos[1] > 455 and mousePos[1] < 475:
-                blueOfStringDescription = 0
-                description.render()
+            '''обработка кнопки играть одному'''
+            if mousePos[0] > 320 and mousePos[0] < 615 and mousePos[1] > 260 and mousePos[1] < 300:
+                greenOfButtonPlayOne = 255
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    print("В разработке...")
             else:
-                blueOfStringDescription = 100
+                greenOfButtonPlayOne = 100
+
+            '''обработка кнопки Выйти'''
+            if mousePos[0] > 490 and mousePos[0] < 615 and mousePos[1] > 333 and mousePos[1] < 373:
+                greenOfButtonExit = 255
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    time.sleep(0.3)
+                    sys.exit()
+            else:
+                greenOfButtonExit = 100
+
+            ''' Обработка копки Описание '''
+            if mousePos[0] > 240 and mousePos[0] < 385 and mousePos[1] > 435 and mousePos[1] < 455:
+                blueOfButtonDescription = 0
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    print("Описание")
+            else:
+                blueOfButtonDescription = 100
 
             window.blit(startScreen, (0, 0))
             pygame.display.flip()
@@ -105,8 +118,8 @@ def goToStartScreen():
 def goToEnterMoneyScreen(callCode):
 
     enterMoneyScreen = pygame.Surface((640, 480))
-    stringInfoAboutDepozit = pygame.font.SysFont("Consolas", 30)
-    toContinue = pygame.font.SysFont("Consolas", 22)
+    stringInfoAboutDepozit = pygame.font.SysFont("Consolas", 35, True)
+    toContinue = pygame.font.SysFont("Consolas", 24, True)
 
     blueOfStringToContinue = 100
 
@@ -115,21 +128,23 @@ def goToEnterMoneyScreen(callCode):
 
     redOfRect = 0
     greenOfRect = 255
+    windowForInter = 'none'
+    widthOfWindowLine = 2
 
     while True:
 
-        enterMoneyScreen.fill((255, 225, 160))
+        enterMoneyScreen.blit(pygame.image.load("Images\Backgrounds\Money screen.bmp"), (0, 0))
 
         if callCode == 0:
-            enterMoneyScreen.blit(stringInfoAboutDepozit.render("Для начала игры вам нужно", 1, (0, 0, 255)), (105, 50))
-            enterMoneyScreen.blit(stringInfoAboutDepozit.render("ввести ваш депозит ($)", 1, (0, 0, 255)), (160, 100))
+            enterMoneyScreen.blit(stringInfoAboutDepozit.render("Для начала игры вам нужно", 1, (0, 0, 100)), (75, 50))
+            enterMoneyScreen.blit(stringInfoAboutDepozit.render("ввести ваш депозит($)", 1, (0, 0, 100)), (130, 100))
         elif callCode == 1:
-            enterMoneyScreen.blit(stringInfoAboutDepozit.render("Введите сумму ($)", 1, (0, 0, 255)), (160, 80))
+            enterMoneyScreen.blit(stringInfoAboutDepozit.render("Введите сумму ($)", 1, (0, 0, 100)), (160, 80))
 
         pygame.draw.rect(enterMoneyScreen, (255, 255, 255), [235, 220, 160, 50])
-        pygame.draw.rect(enterMoneyScreen, (redOfRect, greenOfRect, 0), [235, 220, 160, 50], 2)
+        pygame.draw.rect(enterMoneyScreen, (redOfRect, greenOfRect, 0), [235, 220, 160, 50], widthOfWindowLine)
 
-        enterMoneyScreen.blit(toContinue.render("Продолжить", 1, (50, 50, blueOfStringToContinue)), (260, 420))
+        enterMoneyScreen.blit(toContinue.render("Продолжить", 1, (70, 70, blueOfStringToContinue)), (250, 420))
 
         enterMoneyScreen.blit(enteringDeposit.render(depositString, 1, (0, 0, 0)), (240, 220))
 
@@ -139,7 +154,7 @@ def goToEnterMoneyScreen(callCode):
                 sys.exit()
 
             '''  Обработка ввода депозита  '''
-            if i.type == pygame.KEYDOWN:
+            if i.type == pygame.KEYDOWN and windowForInter == 'center':
                 if (i.key >= pygame.K_0 and i.key <= pygame.K_9 or i.key >= pygame.K_KP0 and i.key <= pygame.K_KP9) \
                         and len(depositString) < 8:
                     depositString += i.unicode
@@ -148,6 +163,15 @@ def goToEnterMoneyScreen(callCode):
 
             '''  Обработка кнопки продолжить'''
             mousePos = pygame.mouse.get_pos()
+
+            if mousePos[0] > 228 and mousePos[0] < 400 and mousePos[1] > 220 and mousePos[1] < 275 and \
+                            i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                windowForInter = 'center'
+                widthOfWindowLine = 3
+                redOfRect = 0
+                greenOfRect = 255
+                depositString = ""
+
             if mousePos[0] > 260 and mousePos[0] < 380 and mousePos[1] > 420 and mousePos[1] < 445:
                 blueOfStringToContinue = 0
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
@@ -156,6 +180,7 @@ def goToEnterMoneyScreen(callCode):
                     else:
                         redOfRect = 255
                         greenOfRect = 0
+                        widthOfWindowLine = 4
             else:
               blueOfStringToContinue = 100
 
@@ -190,52 +215,61 @@ def throwAnimation(gamerDeposit, needToPay, timeCredit):
     stringCreditInfo = pygame.font.SysFont("Consolas", 15)
     stringTimeKreditInfo = pygame.font.SysFont("Consolas", 15)
 
-    throwButton = SpritesOnGameScreen(285, 190, "кнопка бросить кости.bmp")
-
     delay = 0.05
+
+    x1 = 450
+    x2 = 450
+    x1Step = random.randint(25, 60)
+    x2Step = random.randint(25, 60)
 
     while delay < 0.5:
 
         gameInfoScreen.fill((50, 50, 100))
-        gameScreen.fill((255, 225, 160))
+        gameScreen.blit(pygame.image.load("Images\Backgrounds\Game screen.bmp"), (0, 0))
 
         gameInfoScreen.blit(stringGamerDepositInfo.render("Ваш депозит:" + str(gamerDeposit) + "$", 1, (255, 255, 255)),
                             (8, 8))
         if needToPay != 0:
-            gameInfoScreen.blit(stringCreditInfo.render("Долг:" + str(needToPay), 1, (255, 255, 255)), (270, 8))
+            gameInfoScreen.blit(stringCreditInfo.render("Долг:" + str(needToPay) + "$", 1, (255, 255, 255)), (270, 8))
             gameInfoScreen.blit(stringTimeKreditInfo.render("Осталось ходов для выплаты:" + str(timeCredit), 1,
                                                         (255, 255, 255)),(390, 8))
 
         dice1 = random.randint(1, 6)
         if dice1 == 1:
-            spriteDice1 = SpritesOnGameScreen(170, 70, "1.bmp")
+            spriteDice1 = SpritesOnGameScreen(x1, 80, "Images\Dices\One.bmp")
         elif dice1 == 2:
-            spriteDice1 = SpritesOnGameScreen(170, 70, "2.bmp")
+            spriteDice1 = SpritesOnGameScreen(x1, 80, "Images\Dices\Two.bmp")
         elif dice1 == 3:
-            spriteDice1 = SpritesOnGameScreen(170, 70, "3.bmp")
+            spriteDice1 = SpritesOnGameScreen(x1, 80, "Images\Dices\Three.bmp")
         elif dice1 == 4:
-            spriteDice1 = SpritesOnGameScreen(170, 70, "4.bmp")
+            spriteDice1 = SpritesOnGameScreen(x1, 80, "Images\Dices\Four.bmp")
         elif dice1 == 5:
-            spriteDice1 = SpritesOnGameScreen(170, 70, "5.bmp")
+            spriteDice1 = SpritesOnGameScreen(x1, 80, "Images\Dices\Five.bmp")
         else:
-            spriteDice1 = SpritesOnGameScreen(170, 70, "6.bmp")
+            spriteDice1 = SpritesOnGameScreen(x1, 80, "Images\Dices\Six.bmp")
         dice2 = random.randint(1, 6)
         if dice2 == 1:
-            spriteDice2 = SpritesOnGameScreen(370, 70, "1.bmp")
+            spriteDice2 = SpritesOnGameScreen(x2, 250, "Images\Dices\One.bmp")
         elif dice2 == 2:
-            spriteDice2 = SpritesOnGameScreen(370, 70, "2.bmp")
+            spriteDice2 = SpritesOnGameScreen(x2, 250, "Images\Dices\Two.bmp")
         elif dice2 == 3:
-            spriteDice2 = SpritesOnGameScreen(370, 70, "3.bmp")
+            spriteDice2 = SpritesOnGameScreen(x2, 250, "Images\Dices\Three.bmp")
         elif dice2 == 4:
-            spriteDice2 = SpritesOnGameScreen(370, 70, "4.bmp")
+            spriteDice2 = SpritesOnGameScreen(x2, 250, "Images\Dices\Four.bmp")
         elif dice2 == 5:
-            spriteDice2 = SpritesOnGameScreen(370, 70, "5.bmp")
+            spriteDice2 = SpritesOnGameScreen(x2, 250, "Images\Dices\Five.bmp")
         else:
-            spriteDice2 = SpritesOnGameScreen(370, 70, "6.bmp")
+            spriteDice2 = SpritesOnGameScreen(x2, 250, "Images\Dices\Six.bmp")
+
+        x1 -= x1Step
+        x2 -= x2Step
+        if x1Step > 0:
+            x1Step -= random.randint(2, 4)
+        if x2Step > 0:
+            x2Step -= random.randint(2, 4)
 
         spriteDice1.render()
         spriteDice2.render()
-        throwButton.render()
 
         time.sleep(delay)
         delay += 0.05
@@ -257,11 +291,10 @@ def throwAnimation(gamerDeposit, needToPay, timeCredit):
 
 
 def goToTakeCreditScreen():
-
     takeCreditScreen = pygame.Surface((640, 480))
-    stringInfoAboutCredit = pygame.font.SysFont("Consolas", 30)
-    stringInfoAboutMinCredit = pygame.font.SysFont("Consolas", 24)
-    stringNeedToPay = pygame.font.SysFont("Consolas", 18)
+    stringInfoAboutCredit = pygame.font.SysFont("Consolas", 35, True)
+    stringInfoAboutMinCredit = pygame.font.SysFont("Consolas", 28, True)
+    stringNeedToPay = pygame.font.SysFont("Consolas", 18, True)
     toContinue = pygame.font.SysFont("Consolas", 20)
     buttons = pygame.font.SysFont("Consolas", 26, True)
 
@@ -272,6 +305,9 @@ def goToTakeCreditScreen():
 
     redOfRect = 0
     greenOfRect = 255
+    windowForInter = 'none'
+    widthOfWindowLine = 2
+
     redOfYesButton = 200
     redOfNoButton = 200
     blueOfYesButton = 70
@@ -282,24 +318,23 @@ def goToTakeCreditScreen():
 
     while True:
 
-        takeCreditScreen.fill((255, 225, 160))
+        takeCreditScreen.blit(pygame.image.load("Images\Backgrounds\Money screen.bmp"), (0, 0))
 
-        takeCreditScreen.blit(stringInfoAboutCredit.render("Какую сумму хотите взять", 1, (0, 0, 255)), (120, 40))
-        takeCreditScreen.blit(stringInfoAboutMinCredit.render("минимум 20($)", 1, (0, 0, 255)), (240, 85))
+        takeCreditScreen.blit(stringInfoAboutCredit.render("Какую сумму хотите взять", 1, (0, 0, 100)), (90, 40))
+        takeCreditScreen.blit(stringInfoAboutMinCredit.render("минимум 20($)", 1, (0, 0, 100)), (220, 85))
 
         pygame.draw.rect(takeCreditScreen, (255, 255, 255), [235, 220, 160, 50])
-        pygame.draw.rect(takeCreditScreen, (redOfRect, greenOfRect, 0), [235, 220, 160, 50], 2)
+        pygame.draw.rect(takeCreditScreen, (redOfRect, greenOfRect, 0), [235, 220, 160, 50], widthOfWindowLine)
 
         if creditEntered == False:
             takeCreditScreen.blit(toContinue.render("Продолжить", 1, (50, 50, blueOfStringToContinue)), (260, 420))
 
         if creditEntered == True:
             takeCreditScreen.blit(stringNeedToPay.render("Вам нужно будет выплатить " + str(int(credit * 1.3)) +
-                                                         "$ не позднее,", 1, (0, 0, 0)), (115, 320))
-            takeCreditScreen.blit(stringNeedToPay.render("чем через 10 ходов.", 1, (0, 0, 0)), (215, 350))
-            takeCreditScreen.blit(buttons.render("Согласен", 1, (redOfYesButton, 0, blueOfYesButton)), (80, 430))
-            takeCreditScreen.blit(buttons.render("Не согласен", 1, (redOfNoButton, 0, blueOfNoButton)), (400, 430))
-
+                                                         "$ не позднее,", 1, (0, 0, 0)), (115, 310))
+            takeCreditScreen.blit(stringNeedToPay.render("чем через 10 ходов.", 1, (0, 0, 0)), (215, 340))
+            takeCreditScreen.blit(buttons.render("Согласен", 1, (redOfYesButton, 0, blueOfYesButton)), (80, 420))
+            takeCreditScreen.blit(buttons.render("Не согласен", 1, (redOfNoButton, 0, blueOfNoButton)), (400, 420))
 
         takeCreditScreen.blit(enteringCredit.render(creditString, 1, (0, 0, 0)), (240, 220))
 
@@ -308,15 +343,23 @@ def goToTakeCreditScreen():
             if i.type == pygame.QUIT:
                 sys.exit()
 
+            mousePos = pygame.mouse.get_pos()
+            if mousePos[0] > 228 and mousePos[0] < 400 and mousePos[1] > 220 and mousePos[1] < 275 and \
+                            i.type == pygame.MOUSEBUTTONDOWN and i.button == 1 and creditEntered == False:
+                windowForInter = 'center'
+                widthOfWindowLine = 3
+                redOfRect = 0
+                greenOfRect = 255
+                creditString = ""
+
             '''  Обработка ввода кредита  '''
-            if i.type == pygame.KEYDOWN:
+            if i.type == pygame.KEYDOWN and windowForInter == 'center' and creditEntered == False:
                 if (i.key >= pygame.K_0 and i.key <= pygame.K_9 or i.key >= pygame.K_KP0 and i.key <= pygame.K_KP9) \
                         and len(creditString) < 8:
                     creditString += i.unicode
                 elif i.key == pygame.K_BACKSPACE:
                     creditString = creditString[:-1]
 
-            mousePos = pygame.mouse.get_pos()
             '''  Обработка кнопки продолжить '''
             if creditEntered == False:
                 if mousePos[0] > 260 and mousePos[0] < 380 and mousePos[1] > 420 and mousePos[1] < 445:
@@ -328,13 +371,14 @@ def goToTakeCreditScreen():
                         else:
                             redOfRect = 255
                             greenOfRect = 0
+                            widthOfWindowLine = 4
                 else:
                     blueOfStringToContinue = 100
 
             ''' Обработка подтверждения кредита '''
             if creditEntered == True:
 
-                if mousePos[0] > 80 and mousePos[0] < 195 and mousePos[1] > 430 and mousePos[1] < 455:
+                if mousePos[0] > 80 and mousePos[0] < 195 and mousePos[1] > 420 and mousePos[1] < 445:
                     redOfYesButton = 255
                     blueOfYesButton = 0
                     if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
@@ -343,7 +387,7 @@ def goToTakeCreditScreen():
                     redOfYesButton = 200
                     blueOfYesButton = 70
 
-                if mousePos[0] > 400 and mousePos[0] < 555 and mousePos[1] > 430 and mousePos[1] < 455:
+                if mousePos[0] > 400 and mousePos[0] < 555 and mousePos[1] > 420 and mousePos[1] < 445:
                     redOfNoButton = 255
                     blueOfNoButton = 0
                     if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
@@ -365,44 +409,70 @@ def goToTakeCreditScreen():
 
 def whenMoneyIsOut():
 
+    class SpritesOnRefillDepositScreen:
+        def __init__(self, xpos, ypos, filename):
+            self.x = xpos
+            self.y = ypos
+            self.bitmap = pygame.image.load(filename)
+            self.bitmap.set_colorkey((255, 255, 255))
+
+        def render(self):
+            refillDepositScreen.blit(self.bitmap, (self.x, self.y))
+
     refillDepositScreen = pygame.Surface((640, 480))
 
-    stringMoneyIsEnded = pygame.font.SysFont("Consolas", 40)
+    stringMoneyIsEnded = pygame.font.SysFont("Consolas", 40, True)
     stringAddMoney = pygame.font.SysFont("Consolas", 40)
     stringTakeALoan = pygame.font.SysFont("Consolas", 40)
     stringEnd = pygame.font.SysFont("Consolas", 40)
+
+    man1 = SpritesOnRefillDepositScreen(430, 120, "Images\Sprites\Man without money 1.bmp")
+    man2 = SpritesOnRefillDepositScreen(430, 120, "Images\Sprites\Man without money 2.bmp")
+    man3 = SpritesOnRefillDepositScreen(430, 120, "Images\Sprites\Man without money 3.bmp")
 
     greenOfStringAddMoney = 100
     greenOfStringTakeALoan = 100
     greenOfStringEnd = 100
 
+    man = 2
+
     while True:
 
-        refillDepositScreen.fill((255, 225, 160))
+        refillDepositScreen.blit(pygame.image.load("Images\Backgrounds\Money screen.bmp"), (0, 0))
 
-        refillDepositScreen.blit(stringMoneyIsEnded.render("У вас закончились деньги!", 1, (200, 50, 0)), (45, 45))
+        refillDepositScreen.blit(stringMoneyIsEnded.render("У вас закончились деньги!", 1, (0, 50, 200)), (45, 45))
 
-        refillDepositScreen.blit(stringAddMoney.render("Пополнить депозит", 1, (100, greenOfStringAddMoney, 255)), (140, 180))
-        refillDepositScreen.blit(stringTakeALoan.render("Взять кредит", 1, (100, greenOfStringTakeALoan, 255)), (200, 250))
-        refillDepositScreen.blit(stringEnd.render("Выйти", 1, (100, greenOfStringEnd, 255)), (270, 320))
+        refillDepositScreen.blit(stringAddMoney.render("Пополнить депозит", 1, (100, greenOfStringAddMoney, 255)),
+                                 (50, 160))
+        refillDepositScreen.blit(stringTakeALoan.render("Взять кредит", 1, (100, greenOfStringTakeALoan, 255)),
+                                 (50, 240))
+        refillDepositScreen.blit(stringEnd.render("Закончить", 1, (100, greenOfStringEnd, 255)), (50, 320))
+
+        if man == 1:
+            man1.render()
+        elif man == 2:
+            man2.render()
+        else:
+            man3.render()
 
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 sys.exit()
 
             mousePos = pygame.mouse.get_pos()
-
             '''обработка кнопки пополнить депозит'''
-            if mousePos[0] > 170 and mousePos[0] < 455 and mousePos[1] > 180 and mousePos[1] < 220:
+            if mousePos[0] > 50 and mousePos[0] < 430 and mousePos[1] > 160 and mousePos[1] < 195:
                 greenOfStringAddMoney = 0
+                man = 1
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
                     return goToEnterMoneyScreen(1), 0, 0
             else:
                 greenOfStringAddMoney = 100
 
             '''обработка кнопки взять кредит'''
-            if mousePos[0] > 50 and mousePos[0] < 580 and mousePos[1] > 250 and mousePos[1] < 290:
+            if mousePos[0] > 50 and mousePos[0] < 315 and mousePos[1] > 240 and mousePos[1] < 275:
                 greenOfStringTakeALoan = 0
+                man = 2
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
                     gamerDeposit = goToTakeCreditScreen()
                     if gamerDeposit != 0:
@@ -410,9 +480,10 @@ def whenMoneyIsOut():
             else:
                 greenOfStringTakeALoan = 100
 
-            '''обработка кнопки Выход'''
-            if mousePos[0] > 150 and mousePos[0] < 480 and mousePos[1] > 320 and mousePos[1] < 360:
+            '''обработка кнопки Закончить'''
+            if mousePos[0] > 50 and mousePos[0] < 250 and mousePos[1] > 320 and mousePos[1] < 355:
                 greenOfStringEnd = 0
+                man = 3
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
                     return 0, 0, 0
             else:
@@ -436,23 +507,20 @@ def timeToPayCredit(gamerDeposit, needToPay):
     stringTimeToPayCredit = pygame.font.SysFont("Consolas", 40, True)
     stringNeedToPay = pygame.font.SysFont("Consolas", 26)
     buttons = pygame.font.SysFont("Consolas", 26, True)
-    cuvaldaButton = pygame.font.SysFont("Consolas", 28, True)
     stringInfoForPay = pygame.font.SysFont("Consolas", 22)
 
     redOfYesButton = 200
     blueOfYesButton = 70
     redOfNoButton = 200
     blueOfNoButton = 70
-    redOfCuvaldaButton = 200
-    blueOfCuvaldaButton = 70
 
-    escape = False
+    clickRunOut = False
 
     while True:
 
-        payCreditScreen.fill((255, 225, 160))
+        payCreditScreen.blit(pygame.image.load("Images\Backgrounds\Money screen.bmp"), (0, 0))
 
-        payCreditScreen.blit(stringTimeToPayCredit.render("Пора оплатить долг!", 1, (0, 0, 255)), (120, 40))
+        payCreditScreen.blit(stringTimeToPayCredit.render("Пора оплатить долг!", 1, (0, 0, 100)), (120, 40))
 
         payCreditScreen.blit(stringNeedToPay.render("Ваш депозит: " + str(gamerDeposit) + "$", 1, (0, 0, 0)),
                              (200, 140))
@@ -462,15 +530,12 @@ def timeToPayCredit(gamerDeposit, needToPay):
         if gamerDeposit == 0 and needToPay != 0:
             payCreditScreen.blit(stringInfoForPay.render("Вам не хватает денег чтобы оплатить долг!", 1, (255, 0, 0)),
                                  (80, 285))
-        elif gamerDeposit > needToPay and escape == True:
+        elif gamerDeposit > needToPay and clickRunOut == True:
             payCreditScreen.blit(stringInfoForPay.render("Вам хватает денег чтобы оплатить долг!", 1, (255, 0, 0)),
                                  (95, 285))
 
         payCreditScreen.blit(buttons.render("Оплатить", 1, (redOfYesButton, 0, blueOfYesButton)), (110, 380))
         payCreditScreen.blit(buttons.render("Убежать", 1, (redOfNoButton, 0, blueOfNoButton)), (410, 380))
-        if gamerDeposit == 0:
-            payCreditScreen.blit(cuvaldaButton.render("Позвать КУВАЛДИНА!", 1,
-                                                      (redOfCuvaldaButton, 0, blueOfCuvaldaButton)), (187, 430))
 
         for i in pygame.event.get():
 
@@ -487,8 +552,7 @@ def timeToPayCredit(gamerDeposit, needToPay):
                         gamerDeposit = 0
                     else:
                         gamerDeposit -= needToPay
-                        needToPay = 0
-                        print("Оплатил!")
+                        return gamerDeposit, 'paid'
             else:
                 redOfYesButton = 200
                 blueOfYesButton = 70
@@ -497,22 +561,16 @@ def timeToPayCredit(gamerDeposit, needToPay):
                 redOfNoButton = 255
                 blueOfNoButton = 0
                 if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
-                    if escape == True:
-                        print("Сбежал!")
-                    escape = True
+                    if clickRunOut == True or gamerDeposit < needToPay:
+                        youIsRunner = random.randint(0, 1)
+                        if youIsRunner == 1:
+                            return gamerDeposit, 'canRunOut'
+                        else:
+                            return gamerDeposit, 'canNotRunOut'
+                    clickRunOut = True
             else:
                 redOfNoButton = 200
                 blueOfNoButton = 70
-
-            if mousePos[0] > 187 and mousePos[0] < 455 and mousePos[1] > 430 and mousePos[
-                1] < 455 and gamerDeposit == 0:
-                redOfCuvaldaButton = 255
-                blueOfCuvaldaButton = 0
-                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
-                    print("Кувалда спас!")
-            else:
-                redOfCuvaldaButton = 200
-                blueOfCuvaldaButton = 70
 
         window.blit(payCreditScreen, (0, 0))
         pygame.display.flip()
@@ -620,20 +678,18 @@ def goToGameOneScreen(gamerDeposit):
     stringGamerDepositInfo = pygame.font.SysFont("Consolas", 15)
     stringCreditInfo = pygame.font.SysFont("Consolas", 15)
     stringTimeKreditInfo = pygame.font.SysFont("Consolas", 15)
-    stringVashaStavka = pygame.font.SysFont("Consolas", 20)
-    stringNaKakojeChisloStavite = pygame.font.SysFont("Consolas", 20)
-    stringDiceSumInfo = pygame.font.SysFont("Consolas", 30, True)
-    stringNumbersOfDices = pygame.font.SysFont("Consolas", 24)
-    stringVyStaviliInfo = pygame.font.SysFont("Consolas", 18)
-    stringProigrysh = pygame.font.SysFont("Consolas", 18)
-    stringVyigrysh = pygame.font.SysFont("Consolas", 18)
+    stringVashaStavka = pygame.font.SysFont("Consolas", 24)
+    stringNaKakojeChisloStavite = pygame.font.SysFont("Consolas", 24)
+    stringDiceSumInfo = pygame.font.SysFont("Consolas", 50, True)
+    stringStavkaSygrala = pygame.font.SysFont("Consolas", 22)
+    stringProigrysh = pygame.font.SysFont("Consolas", 22)
+    stringVyigrysh = pygame.font.SysFont("Consolas", 22)
+    operationsInfo = pygame.font.SysFont("Consolas", 22)
 
-    StringMoneyIsFill = pygame.font.SysFont("Consolas", 26)
-
-    spriteDice1 = SpritesOnGameScreen(170, 70, "1.bmp")
-    spriteDice2 = SpritesOnGameScreen(370, 70, "1.bmp")
-    throwButton = SpritesOnGameScreen(285, 190, "кнопка бросить кости.bmp")
-    throwButtonActive = SpritesOnGameScreen(285, 190, "кнопка бросить кости активная.bmp")
+    spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\One.bmp")
+    spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\One.bmp")
+    throwButton = SpritesOnGameScreen(460, 65, "Images\Sprites\Throw dices button.bmp")
+    throwButtonActive = SpritesOnGameScreen(460, 65, "Images\Sprites\Throw dices button(active).bmp")
 
     betString = ""
     numberString = ""
@@ -651,12 +707,12 @@ def goToGameOneScreen(gamerDeposit):
 
     needToPay = 0
     timeCredit = 0
-    sum = 0
+    sum = -1
 
     while True:
 
         gameInfoScreen.fill((50, 50, 100))
-        gameScreen.fill((255, 225, 160))
+        gameScreen.blit(pygame.image.load("Images\Backgrounds\Game screen.bmp"), (0, 0))
 
         gameInfoScreen.blit(stringGamerDepositInfo.render("Ваш депозит:" + str(gamerDeposit) + "$", 1, (255, 255, 255)),
                             (8, 8))
@@ -666,36 +722,38 @@ def goToGameOneScreen(gamerDeposit):
                                                         (255, 255, 255)),(390, 8))
 
         if sum > 1:
-            gameScreen.blit(stringDiceSumInfo.render("В ы п а л о : " + str(sum), 1, (150, 0, 100)), (185, 20))
-            gameScreen.blit(stringNumbersOfDices.render(str(dice1) + " : " + str(dice2), 1, (0, 0, 0)), (286, 108))
-            gameScreen.blit(stringVyStaviliInfo.render("Вы ставили " + str(gamerBet) + "$ на сумму: " +
-                                                       str(gamerNumber), 1, (50, 50, 50)), (190, 300))
+            gameScreen.blit(stringDiceSumInfo.render("В ы п а л о : " + str(sum), 1, (255, 255, 0)), (110, 190))
+
             if gamerNumber != sum:
-                gameScreen.blit(stringProigrysh.render("Списано: " + str(gamerBet) + "$", 1, (50, 50, 50)), (260, 330))
+                gameScreen.blit(stringStavkaSygrala.render("Ставка не сыграла.", 1, (250, 250, 250)), (50, 290))
+                gameScreen.blit(stringProigrysh.render("Списано: "+ str(gamerBet)+ "$", 1, (250, 250, 250)), (280, 290))
             else:
-                gameScreen.blit(stringVyigrysh.render("Вы выиграли: " + str(gamerBet * 6) + "$!", 1, (50, 50, 50)),
-                                (240, 330))
+                gameScreen.blit(stringStavkaSygrala.render("Ставка сыграла!", 1, (250, 250, 250)), (45, 290))
+                gameScreen.blit(stringVyigrysh.render("Вы выиграли: " + str(gamerBet * 6) + "$", 1, (250, 250, 250)),
+                                (250, 290))
         if sum == 1:
-            gameScreen.blit(StringMoneyIsFill.render("Деньги добавлены.", 1, (200, 0, 50)), (205, 300))
+            gameScreen.blit(operationsInfo.render("Деньги добавлены.", 1, (250, 250, 250)), (50, 290))
+        if sum == 0:
+            gameScreen.blit(operationsInfo.render("Долг погашен.", 1, (250, 250, 250)), (50, 290))
 
         spriteDice1.render()
         spriteDice2.render()
 
         mousePos = pygame.mouse.get_pos()
-        if mousePos[0] > 285 and mousePos[0] < 355 and mousePos[1] > 220 and mousePos[1] < 290:
+        if mousePos[0] > 460 and mousePos[0] < 540 and mousePos[1] > 95 and mousePos[1] < 175:
             throwButtonActive.render()
         else:
             throwButton.render()
 
-        gameScreen.blit(stringVashaStavka.render("Ваша ставка($):", 1, (0, 0, 0)), (20, 400))
-        pygame.draw.rect(gameScreen, (255, 255, 255), [188, 395, 117, 30])
-        pygame.draw.rect(gameScreen, (redOfLeftRect, greenOfLeftRect, 0), [188, 395, 117, 30], lineWidthOfLeftRect)
-        gameScreen.blit(stringNaKakojeChisloStavite.render("Сколько выпадет(2-12):", 1, (0, 0, 0)), (325, 400))
-        pygame.draw.rect(gameScreen, (255, 255, 255), [570, 395, 40, 30])
-        pygame.draw.rect(gameScreen, (redOfRightRect, greenOfRightRect, 0), [570, 395, 40, 30], lineWidthOfRightRect)
+        gameScreen.blit(stringNaKakojeChisloStavite.render("Сколько выпадет(2-12):", 1, (0, 0, 0)), (50, 360))
+        pygame.draw.rect(gameScreen, (170, 255, 170), [356, 358, 40, 25])
+        pygame.draw.rect(gameScreen, (redOfRightRect, greenOfRightRect, 0), [356, 358, 40, 25], lineWidthOfRightRect)
+        gameScreen.blit(stringVashaStavka.render("Ваша ставка($):", 1, (0, 0, 0)), (50, 400))
+        pygame.draw.rect(gameScreen, (170, 255, 170), [280, 398, 117, 25])
+        pygame.draw.rect(gameScreen, (redOfLeftRect, greenOfLeftRect, 0), [280, 398, 117, 25], lineWidthOfLeftRect)
 
-        gameScreen.blit(enteringBet.render(betString, 1, (0, 0, 0)), (190, 400))
-        gameScreen.blit(enteringNumber.render(numberString, 1, (0, 0, 0)), (576, 400))
+        gameScreen.blit(enteringNumber.render(numberString, 1, (0, 0, 0)), (361, 360))
+        gameScreen.blit(enteringBet.render(betString, 1, (0, 0, 0)), (282, 400))
 
         for i in pygame.event.get():
 
@@ -703,28 +761,28 @@ def goToGameOneScreen(gamerDeposit):
                 sys.exit()
 
             '''  Выбор окна ввода'''
-            if mousePos[0] > 188 and mousePos[0] < 308 and mousePos[1] > 425 and mousePos[1] < 455 and \
+            if mousePos[0] > 277 and mousePos[0] < 402 and mousePos[1] > 425 and mousePos[1] < 458 and \
                             i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
-                windowForInter = 'left'
+                windowForInter = 'Low'
                 betString = ""
-                lineWidthOfLeftRect = 2
+                lineWidthOfLeftRect = 3
                 lineWidthOfRightRect = 1
                 redOfLeftRect = 0
                 redOfRightRect = 255
                 greenOfLeftRect = 255
 
-            elif mousePos[0] > 570 and mousePos[0] < 612 and mousePos[1] > 425 and mousePos[1] < 455 and \
+            elif mousePos[0] > 352 and mousePos[0] < 400 and mousePos[1] > 385 and mousePos[1] < 417 and \
                             i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
-                windowForInter = 'right'
+                windowForInter = 'Top'
                 numberString = ""
                 lineWidthOfLeftRect = 1
-                lineWidthOfRightRect = 2
+                lineWidthOfRightRect = 3
                 redOfRightRect = 0
                 redOfLeftRect = 255
                 greenOfRightRect = 255
 
             '''  Обработка ввода ставки ($) '''
-            if i.type == pygame.KEYDOWN and windowForInter == 'left':
+            if i.type == pygame.KEYDOWN and windowForInter == 'Low':
                 if (i.key >= pygame.K_0 and i.key <= pygame.K_9 or i.key >= pygame.K_KP0 and i.key <= pygame.K_KP9) \
                         and len(betString) < 8:
                     betString += i.unicode
@@ -732,7 +790,7 @@ def goToGameOneScreen(gamerDeposit):
                     betString = betString[:-1]
 
             '''  Обработка ввода ставки на число (2-12) '''
-            if i.type == pygame.KEYDOWN and windowForInter == 'right':
+            if i.type == pygame.KEYDOWN and windowForInter == 'Top':
                 if (i.key >= pygame.K_0 and i.key <= pygame.K_9 or i.key >= pygame.K_KP0 and i.key <= pygame.K_KP9) \
                         and len(numberString) < 2:
                     numberString += i.unicode
@@ -740,7 +798,7 @@ def goToGameOneScreen(gamerDeposit):
                     numberString = numberString[:-1]
 
             ''' Обработка кнопки бросить кубики'''
-            if mousePos[0] > 285 and mousePos[0] < 355 and mousePos[1] > 220 and mousePos[1] < 290 and \
+            if mousePos[0] > 460 and mousePos[0] < 540 and mousePos[1] > 95 and mousePos[1] < 175 and \
                             i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
                 if numberString != '' and betString != '':
                     gamerNumber = int(str(''.join(numberString)))
@@ -754,30 +812,30 @@ def goToGameOneScreen(gamerDeposit):
                         numberString = ""
                         dice1 = random.randint(1, 6)
                         if dice1 == 1:
-                            spriteDice1 = SpritesOnGameScreen(170, 70, "1.bmp")
+                            spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\One.bmp")
                         elif dice1 == 2:
-                            spriteDice1 = SpritesOnGameScreen(170, 70, "2.bmp")
+                            spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\Two.bmp")
                         elif dice1 == 3:
-                            spriteDice1 = SpritesOnGameScreen(170, 70, "3.bmp")
+                            spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\Three.bmp")
                         elif dice1 == 4:
-                            spriteDice1 = SpritesOnGameScreen(170, 70, "4.bmp")
+                            spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\Four.bmp")
                         elif dice1 == 5:
-                            spriteDice1 = SpritesOnGameScreen(170, 70, "5.bmp")
+                            spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\Five.bmp")
                         else:
-                            spriteDice1 = SpritesOnGameScreen(170, 70, "6.bmp")
+                            spriteDice1 = SpritesOnGameScreen(70, 50, "Images\Dices\Six.bmp")
                         dice2 = random.randint(1, 6)
                         if dice2 == 1:
-                            spriteDice2 = SpritesOnGameScreen(370, 70, "1.bmp")
+                            spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\One.bmp")
                         elif dice2 == 2:
-                            spriteDice2 = SpritesOnGameScreen(370, 70, "2.bmp")
+                            spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\Two.bmp")
                         elif dice2 == 3:
-                            spriteDice2 = SpritesOnGameScreen(370, 70, "3.bmp")
+                            spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\Three.bmp")
                         elif dice2 == 4:
-                            spriteDice2 = SpritesOnGameScreen(370, 70, "4.bmp")
+                            spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\Four.bmp")
                         elif dice2 == 5:
-                            spriteDice2 = SpritesOnGameScreen(370, 70, "5.bmp")
+                            spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\Five.bmp")
                         else:
-                            spriteDice2 = SpritesOnGameScreen(370, 70, "6.bmp")
+                            spriteDice2 = SpritesOnGameScreen(250, 50, "Images\Dices\Six.bmp")
 
                         sum = dice1 + dice2
                         if gamerNumber != sum:
@@ -789,20 +847,20 @@ def goToGameOneScreen(gamerDeposit):
                         if gamerBet == 0 or gamerBet > gamerDeposit:
                             redOfLeftRect = 255
                             greenOfLeftRect = 0
-                            lineWidthOfLeftRect = 2
+                            lineWidthOfLeftRect = 3
                         if gamerNumber < 2 or gamerNumber > 12:
                             redOfRightRect = 255
                             greenOfRightRect = 0
-                            lineWidthOfRightRect = 2
+                            lineWidthOfRightRect = 3
                 else:
                     if betString == '':
                         redOfLeftRect = 255
                         greenOfLeftRect = 0
-                        lineWidthOfLeftRect = 2
+                        lineWidthOfLeftRect = 3
                     if numberString == '':
                         redOfRightRect = 255
                         greenOfRightRect = 0
-                        lineWidthOfRightRect = 2
+                        lineWidthOfRightRect = 3
 
         if gamerDeposit == 0:
             if timeCredit == 0:
@@ -815,7 +873,14 @@ def goToGameOneScreen(gamerDeposit):
 
 
         if timeCredit == 1:
-            gamerDeposit = timeToPayCredit(gamerDeposit, needToPay)
+
+            gamerDeposit, action = timeToPayCredit(gamerDeposit, needToPay)
+            if action == 'Paid':
+                timeCredit = 0
+                needToPay = 0
+                sum = 0
+            else:
+                return action
 
         window.blit(gameInfoScreen, (0, 0))
         window.blit(gameScreen, (0, 30))
@@ -874,10 +939,16 @@ while True:
 
     if selection == 1:
         gamerDeposit = goToEnterMoneyScreen(0)
-        canRunOut = goToGameOneScreen(gamerDeposit)
-        if canRunOut == False:
-            ripScreen()
+        acton = goToGameOneScreen(gamerDeposit)
+        if acton == 'canRunOut':
+            print("Легко отделался")
+        else:
+            print("Поймали")
     elif selection == 2:
         print("В разработке...")
     else:
         print("В разработке...")
+
+# добавить досрочное погашение кредита
+# поправить условие появление инфо о сыгравше/не сыгравшей ставке
+# ну и доделать финишные скрины
