@@ -15,7 +15,42 @@ class Cards:
     def render(self):
         gameScreen.blit(self.bitmap, (self.x, self.y))
 
-gamerCard1 = Cards(100, 100, "Images\Cards\clear.bmp")
+deskSize = 52
+cardDesk = []
+suit = ['c', 'd', 'h', 's']
+suitNumber = 0
+cardNumber = 2
+
+for i in range(deskSize):
+
+    if cardNumber < 11:
+        cardDesk.append([str(cardNumber)])
+    elif cardNumber == 11:
+        cardDesk.append(['J'])
+    elif cardNumber == 12:
+        cardDesk.append(['O'])
+    elif cardNumber == 13:
+        cardDesk.append(['K'])
+    else:
+        cardDesk.append(['A'])
+
+    cardDesk[i].append(suit[suitNumber])
+    cardNumber += 1
+
+    if cardNumber == 15:
+        suitNumber += 1
+        cardNumber = 2
+
+cardDesk *= 6
+deskSize *= 6
+
+i = 0
+cardName = cardDesk[i][0] + cardDesk[i][1] + '.png'
+print(cardName)
+cardName = 'Button.png'
+print(cardName)
+
+gamerCard1 = Cards(100, 100, "Images\Buttons\\" + cardName)
 
 while True:
 
