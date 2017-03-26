@@ -1,4 +1,5 @@
 import pygame
+pygame.font.init()
 import sys
 import random
 import time
@@ -24,6 +25,18 @@ class Buttons:
         self.x = xpos
         self.y = ypos
         self.bitmap = pygame.image.load(filename)
+
+    def render(self):
+        gameScreen.blit(self.bitmap, (self.x, self.y))
+
+
+class Chips:
+
+    def __init__(self, xpos, ypos, filename):
+        self.x = xpos
+        self.y = ypos
+        self.bitmap = pygame.image.load(filename)
+        self.bitmap.set_colorkey((0, 0, 0))
 
     def render(self):
         gameScreen.blit(self.bitmap, (self.x, self.y))
@@ -75,15 +88,15 @@ random.shuffle(cardDesk)
 '''  Определяем цену карты        Определяем цену карты        Определяем цену карты        Определяем цену карты   '''
 
 
-def determineCardPrice(sum, card):
+def determineCardPrice(sum, card, countA):
     if card == 'J' or card == 'Q' or card == 'K' or card == '10':
-        return 10
+        return 10, countA
     elif card == 'A' and sum < 11:
-        return 11
+        return 11, 1
     elif card == 'A' and sum >= 11:
-        return 1
+        return 1, countA
     else:
-        return int(card)
+        return int(card), countA
 
 
 
@@ -94,9 +107,20 @@ def determineCardPrice(sum, card):
 
 gameScreen = pygame.Surface((800, 600))
 
+depozitText = pygame.font.SysFont("Consolas", 16, True)
+betText = pygame.font.SysFont("Consolas", 16, True)
+
 deal = Buttons(375, 495, "Images\Buttons\deal.png")
 dealActive = Buttons(375, 495, "Images\Buttons\deal active.png")
 
+chip1 = Chips(32, 447, "Images\Chips\\1.png")
+chip5 = Chips(73, 466, "Images\Chips\\5.png")
+chip25 = Chips(114, 481, "Images\Chips\\25.png")
+chip100 = Chips(155, 494, "Images\Chips\\100.png")
+chip1Active = Chips(32, 447, "Images\Chips\\1 active.png")
+chip5Active = Chips(73, 466, "Images\Chips\\5 active.png")
+chip25Active = Chips(114, 481, "Images\Chips\\25 active.png")
+chip100Active = Chips(155, 494, "Images\Chips\\100 active.png")
 
 cardCount = 0
 gamerCardCount = -1
@@ -111,17 +135,28 @@ xPosOfThirdButtons = 375
 xPosOfFourthButtons = 375
 xPosOfFivethButtons = 375
 clickedButton = 'none'
+insuranceIsActive = False
+chipsCount = 0
+chipName = 'none'
+doublesRender = False
+lightGamerA = 0
+lightDealerA = 0
+
+gamerDepozit = 100
+gamerBet = 0
 
 while True:
 
     gameScreen.blit(pygame.image.load("Images\Backgrounds\game screen.png"), (0, 0))
+
     mousePos = pygame.mouse.get_pos()
 
     if gamerSum > 21 or dealerSum > 21:
         if gamerSum > 21:
-            print("LOOSER!", dealerSum)
+            print("you LOOSER!")
         elif dealerSum > 21:
-            print("WINNER!", dealerSum)
+            print("you WINNER!")
+            gamerDepozit += gamerBet * 2
         time.sleep(2)
         gamerCardCount = -1
         dealerCardCount = -1
@@ -135,15 +170,33 @@ while True:
         xPosOfFourthButtons = 375
         xPosOfFivethButtons = 375
         clickedButton = 'none'
+        insuranceIsActive = False
+        chipsCount = 0
+        doublesRender = False
+        lightGamerA = 0
+        lightDealerA = 0
+
+        gamerBet = 0
 
     if clickedButton == 'dealerGetCards':
         clickedButton = 'none'
-        if gamerSum > dealerSum:
-            print("WINNER!", dealerSum)
+        if gamerSum == 21 and dealerSum != 21 and gamerCardCount == 2:
+            print("Black Jack. you WINNER!")
+            gamerDepozit += gamerBet * 3
+        elif dealerSum == 21 and gamerSum != 21:
+            if insuranceIsActive == True and dealerCardCount == 2:
+                print("Insuranse")
+                gamerDepozit += gamerBet
+            else:
+                print("you LOOSER!")
+        elif gamerSum > dealerSum:
+            print("you WINNER!")
+            gamerDepozit += gamerBet * 2
         elif gamerSum < dealerSum:
-            print("LOOSER!", dealerSum)
+            print("you LOOSER!")
         else:
-            print("draw!", dealerSum)
+            print("draw!")
+            gamerDepozit += gamerBet
         time.sleep(2)
         gamerCardCount = -1
         dealerCardCount = -1
@@ -157,37 +210,122 @@ while True:
         xPosOfFourthButtons = 375
         xPosOfFivethButtons = 375
         clickedButton = 'none'
+        insuranceIsActive = False
+        chipsCount = 0
+        doublesRender = False
+        lightGamerA = 0
+        lightDealerA = 0
+
+        gamerBet = 0
 
     if cardCount > deskSize * deckQuantity / 1.5 and gamerCardCount == -1:
         random.shuffle(cardDesk)
         cardCount = 0
 
     if takeABet == False:
-        if mousePos[0] > 375 and mousePos[0] < 435 and mousePos[1] > 495 and mousePos[1] < 555:
+
+        if mousePos[0] > 32 and mousePos[0] < 70 and mousePos[1] > 447 and mousePos[1] < 478:
+            chip1Active.render()
+        else:
+            chip1.render()
+
+        if mousePos[0] > 73 and mousePos[0] < 110 and mousePos[1] > 466 and mousePos[1] < 498:
+            chip5Active.render()
+        else:
+            chip5.render()
+
+        if mousePos[0] > 114 and mousePos[0] < 150 and mousePos[1] > 481 and mousePos[1] < 514:
+            chip25Active.render()
+        else:
+            chip25.render()
+
+        if mousePos[0] > 155 and mousePos[0] < 190 and mousePos[1] > 494 and mousePos[1] < 527:
+            chip100Active.render()
+        else:
+            chip100.render()
+
+        if mousePos[0] > 375 and mousePos[0] < 435 and mousePos[1] > 495 and mousePos[1] < 555 and gamerBet != 0:
             dealActive.render()
         else:
             deal.render()
+
+        if chipName != 'none':
+            if chipsCount == 1:
+                rendersChip1 = Chips(389, 400, "Images\Chips\\" + chipName + ".png")
+                valueOfChip1 = int(chipName)
+                doubles1Chip1 = Chips(369, 400, "Images\Chips\\" + chipName + ".png")
+                doubles2Chip1 = Chips(409, 400, "Images\Chips\\" + chipName + ".png")
+            elif chipsCount == 2:
+                rendersChip2 = Chips(389, 395, "Images\Chips\\" + chipName + ".png")
+                valueOfChip2 = int(chipName)
+                doubles1Chip2 = Chips(369, 395, "Images\Chips\\" + chipName + ".png")
+                doubles2Chip2 = Chips(409, 395, "Images\Chips\\" + chipName + ".png")
+            elif chipsCount == 3:
+                rendersChip3 = Chips(389, 390, "Images\Chips\\" + chipName + ".png")
+                valueOfChip3 = int(chipName)
+                doubles1Chip3 = Chips(369, 390, "Images\Chips\\" + chipName + ".png")
+                doubles2Chip3 = Chips(409, 390, "Images\Chips\\" + chipName + ".png")
+            elif chipsCount == 4:
+                rendersChip4 = Chips(389, 385, "Images\Chips\\" + chipName + ".png")
+                valueOfChip4 = int(chipName)
+                doubles1Chip4 = Chips(369, 385, "Images\Chips\\" + chipName + ".png")
+                doubles2Chip4 = Chips(409, 385, "Images\Chips\\" + chipName + ".png")
+            elif chipsCount == 5:
+                rendersChip5 = Chips(389, 380, "Images\Chips\\" + chipName + ".png")
+                valueOfChip5 = int(chipName)
+                doubles1Chip5 = Chips(369, 380, "Images\Chips\\" + chipName + ".png")
+                doubles2Chip5 = Chips(409, 380, "Images\Chips\\" + chipName + ".png")
+            chipName = 'none'
+
+        if chipsCount > 0:
+            rendersChip1.render()
+            gamerBet = valueOfChip1
+            if chipsCount > 1:
+                rendersChip2.render()
+                gamerBet = valueOfChip1 + valueOfChip2
+                if chipsCount > 2:
+                    rendersChip3.render()
+                    gamerBet = valueOfChip1 + valueOfChip2 + valueOfChip3
+                    if chipsCount > 3:
+                        rendersChip4.render()
+                        gamerBet = valueOfChip1 + valueOfChip2 + valueOfChip3 + valueOfChip4
+                        if chipsCount > 4:
+                            rendersChip5.render()
+                            gamerBet = valueOfChip1 + valueOfChip2 + valueOfChip3 + valueOfChip4 + valueOfChip5
+        else:
+            gamerBet = 0
+
+    elif chipsCount > 0 and doublesRender == False:
+            rendersChip1.render()
+            if chipsCount > 1:
+                rendersChip2.render()
+                if chipsCount > 2:
+                    rendersChip3.render()
+                    if chipsCount > 3:
+                        rendersChip4.render()
+                        if chipsCount > 4:
+                            rendersChip5.render()
 
     if gamerCardCount == 0:
 
         gamerCard1 = Cards(370, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
         valueOfGamerCard1 = cardDesk[cardCount][0]
-        priceOfGamerCard1 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+        priceOfGamerCard1, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
         gamerSum += priceOfGamerCard1
 
         dealerCard1 = Cards(350, 100, "Images\Cards\\" + cardDesk[cardCount + 1][0] + cardDesk[cardCount + 1][1] + ".png")
         valueOfDealerCard1 = cardDesk[cardCount + 1][0]
-        priceOfDealerCard1 = determineCardPrice(dealerSum, cardDesk[cardCount + 1][0])
+        priceOfDealerCard1, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount + 1][0], lightDealerA)
         dealerSum += priceOfDealerCard1
 
         gamerCard2 = Cards(390, 280, "Images\Cards\\" + cardDesk[cardCount + 2][0] + cardDesk[cardCount + 2][1] + ".png")
         valueOfGamerCard2 = cardDesk[cardCount + 2][0]
-        priceOfGamerCard2 = determineCardPrice(gamerSum, cardDesk[cardCount + 2][0])
+        priceOfGamerCard2, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount + 2][0], lightGamerA)
         gamerSum += priceOfGamerCard2
 
         dealerCard2 = Cards(410, 100, "Images\Cards\\" + cardDesk[cardCount + 3][0] + cardDesk[cardCount + 3][1] + ".png")
         valueOfDealerCard2 = cardDesk[cardCount + 3][0]
-        priceOfDealerCard2 = determineCardPrice(dealerSum, cardDesk[cardCount + 3][0])
+        priceOfDealerCard2, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount + 3][0], lightDealerA)
         dealerSum += priceOfDealerCard2
 
         gamerCardCount = 2
@@ -199,33 +337,51 @@ while True:
         if gamerCardCount == 3:
             gamerCard3 = Cards(410, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
             valueOfGamerCard3 = cardDesk[cardCount][0]
-            priceOfGamerCard3 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+            priceOfGamerCard3, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
             gamerSum += priceOfGamerCard3
+            if gamerSum > 21 and lightGamerA == 1:
+                gamerSum -= 10
+                lightGamerA = 0
         elif gamerCardCount == 4:
             gamerCard4 = Cards(430, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
             valueOfGamerCard4 = cardDesk[cardCount][0]
-            priceOfGamerCard4 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+            priceOfGamerCard4, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
             gamerSum += priceOfGamerCard4
+            if gamerSum > 21 and lightGamerA == 1:
+                gamerSum -= 10
+                lightGamerA = 0
         elif gamerCardCount == 5:
             gamerCard5 = Cards(450, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
             valueOfGamerCard5 = cardDesk[cardCount][0]
-            priceOfGamerCard5 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+            priceOfGamerCard5, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
             gamerSum += priceOfGamerCard5
+            if gamerSum > 21 and lightGamerA == 1:
+                gamerSum -= 10
+                lightGamerA = 0
         elif gamerCardCount == 6:
             gamerCard6 = Cards(470, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
             valueOfGamerCard6 = cardDesk[cardCount][0]
-            priceOfGamerCard6 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+            priceOfGamerCard6, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
             gamerSum += priceOfGamerCard6
+            if gamerSum > 21 and lightGamerA == 1:
+                gamerSum -= 10
+                lightGamerA = 0
         elif gamerCardCount == 7:
             gamerCard7 = Cards(490, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
             valueOfGamerCard7 = cardDesk[cardCount][0]
-            priceOfGamerCard7 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+            priceOfGamerCard7, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
             gamerSum += priceOfGamerCard7
+            if gamerSum > 21 and lightGamerA == 1:
+                gamerSum -= 10
+                lightGamerA = 0
         elif gamerCardCount == 8:
             gamerCard8 = Cards(510, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
             valueOfGamerCard8 = cardDesk[cardCount][0]
-            priceOfGamerCard8 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+            priceOfGamerCard8, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
             gamerSum += priceOfGamerCard8
+            if gamerSum > 21 and lightGamerA == 1:
+                gamerSum -= 10
+                lightGamerA = 0
 
     if clickedButton == 'Stand':
         clickedButton = 'dealerGetCards'
@@ -233,42 +389,86 @@ while True:
             dealerCardCount += 1
             cardCount += 1
             if dealerCardCount == 3:
-                dealerCard3 = Cards(450, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                dealerCard3 = Cards(430, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
                 valueOfDealerCard3 = cardDesk[cardCount][0]
-                priceOfDealerCard3 = determineCardPrice(dealerSum, cardDesk[cardCount][0])
+                priceOfDealerCard3, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
                 dealerSum += priceOfDealerCard3
+                if dealerSum > 21 and lightDealerA == 1:
+                    dealerSum -= 10
+                    lightDealerA = 0
             elif dealerCardCount == 4:
-                dealerCard4 = Cards(470, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                dealerCard4 = Cards(450, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
                 valueOfDealerCard4 = cardDesk[cardCount][0]
-                priceOfDealerCard4 = determineCardPrice(dealerSum, cardDesk[cardCount][0])
+                priceOfDealerCard4, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
                 dealerSum += priceOfDealerCard4
+                if dealerSum > 21 and lightDealerA == 1:
+                    dealerSum -= 10
+                    lightDealerA = 0
             elif dealerCardCount == 5:
-                dealerCard5 = Cards(490, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                dealerCard5 = Cards(470, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
                 valueOfDealerCard5 = cardDesk[cardCount][0]
-                priceOfDealerCard5 = determineCardPrice(dealerSum, cardDesk[cardCount][0])
+                priceOfDealerCard5, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
                 dealerSum += priceOfDealerCard5
+                if dealerSum > 21 and lightDealerA == 1:
+                    dealerSum -= 10
+                    lightDealerA = 0
             elif dealerCardCount == 6:
-                dealerCard6 = Cards(510, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                dealerCard6 = Cards(490, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
                 valueOfDealerCard6 = cardDesk[cardCount][0]
-                priceOfDealerCard6 = determineCardPrice(dealerSum, cardDesk[cardCount][0])
+                priceOfDealerCard6, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
                 dealerSum += priceOfDealerCard6
+                if dealerSum > 21 and lightDealerA == 1:
+                    dealerSum -= 10
+                    lightDealerA = 0
             elif dealerCardCount == 7:
-                dealerCard7 = Cards(530, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                dealerCard7 = Cards(510, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
                 valueOfDealerCard7 = cardDesk[cardCount][0]
-                priceOfDealerCard7 = determineCardPrice(dealerSum, cardDesk[cardCount][0])
+                priceOfDealerCard7, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
                 dealerSum += priceOfDealerCard7
+                if dealerSum > 21 and lightDealerA == 1:
+                    dealerSum -= 10
+                    lightDealerA = 0
             elif dealerCardCount == 8:
-                dealerCard8 = Cards(450, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                dealerCard8 = Cards(530, 100, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
                 valueOfDealerCard8 = cardDesk[cardCount][0]
-                priceOfDealerCard8 = determineCardPrice(dealerSum, cardDesk[cardCount][0])
+                priceOfDealerCard8, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
                 dealerSum += priceOfDealerCard8
+                if dealerSum > 21 and lightDealerA == 1:
+                    dealerSum -= 10
+                    lightDealerA = 0
 
     if clickedButton == 'Double':
-        clickedButton = 'Stand'
+        doublesRender = True
+
         gamerCard3 = Cards(410, 280, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
         valueOfGamerCard3 = cardDesk[cardCount][0]
-        priceOfGamerCard3 = determineCardPrice(gamerSum, cardDesk[cardCount][0])
+        priceOfGamerCard3, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount][0], lightGamerA)
         gamerSum += priceOfGamerCard3
+        if gamerSum > 21 and lightGamerA == 1:
+            gamerSum -= 10
+            lightGamerA = 0
+
+        clickedButton = 'Stand'
+
+    if doublesRender == True:
+        doubles1Chip1.render()
+        doubles2Chip1.render()
+        if chipsCount > 1:
+            doubles1Chip2.render()
+            doubles2Chip2.render()
+            if chipsCount > 2:
+                doubles1Chip3.render()
+                doubles2Chip3.render()
+                if chipsCount > 3:
+                    doubles1Chip4.render()
+                    doubles2Chip4.render()
+                    if chipsCount > 4:
+                        doubles1Chip5.render()
+                        doubles2Chip5.render()
+
+    if clickedButton == 'Insurance':
+        insuranceIsActive = True
+        clickedButton = 'none'
 
     if gamerCardCount > 0:
         gamerCard1.render()
@@ -354,22 +554,26 @@ while True:
             secondButton.render()
 
         if mousePos[0] > xPosOfThirdButtons and mousePos[0] < xPosOfThirdButtons + 60 and \
-                        gamerCardCount == 2 and mousePos[1] > 495 and mousePos[1] < 555:
+                        gamerCardCount == 2 and mousePos[1] > 495 and mousePos[1] < 555 and gamerDepozit >= gamerBet:
             thirdButtonActive.render()
-        elif gamerCardCount == 2:
+        elif gamerCardCount == 2 and gamerDepozit >= gamerBet:
             thirdButton.render()
 
         if buttonQuantity == 4 and mousePos[0] > xPosOfFourthButtons and mousePos[0] < xPosOfFourthButtons + 60 and \
-                        mousePos[1] > 495 and mousePos[1] < 555:
+                        mousePos[1] > 495 and mousePos[1] < 555 and insuranceIsActive == False:
             fourthButtonActive.render()
-        elif buttonQuantity == 4:
+        elif buttonQuantity == 4 and insuranceIsActive == False:
             fourthButton.render()
 
         if buttonQuantity == 5 and mousePos[0] > xPosOfFivethButtons and mousePos[0] < xPosOfFivethButtons + 60 and \
-                        mousePos[1] > 495 and mousePos[1] < 555:
+                        mousePos[1] > 495 and mousePos[1] < 555 and insuranceIsActive == False:
             fivethButtonActive.render()
-        elif buttonQuantity == 5:
+        elif buttonQuantity == 5 and insuranceIsActive == False:
             fivethButton.render()
+
+    gameScreen.blit(depozitText.render("Money: "+ str(gamerDepozit) + " $", 1, (255, 255, 255)), (30, 576))
+    if takeABet == True:
+        gameScreen.blit(betText.render("Bet: " + str(gamerBet) + " $", 1, (255, 255, 255)), (350, 576))
 
     for i in pygame.event.get():
 
@@ -392,8 +596,11 @@ while True:
             buttonQuantity = -1
 
         if mousePos[0] > xPosOfThirdButtons and mousePos[0] < xPosOfThirdButtons + 60 and gamerCardCount == 2 and \
-                        mousePos[1] > 495 and mousePos[1] < 555 and i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                        mousePos[1] > 495 and mousePos[1] < 555 and gamerDepozit >= gamerBet  and \
+                        i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
             clickedButton = 'Double'
+            gamerDepozit -= gamerBet
+            gamerBet *= 2
             buttonQuantity = -1
             gamerCardCount += 1
             cardCount += 1
@@ -411,13 +618,48 @@ while True:
                         mousePos[1] > 495 and mousePos[1] < 555 and i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
             clickedButton = 'Insurance'
 
-        if takeABet == False and i.type == pygame.MOUSEBUTTONDOWN and i.button == 1 and\
-                        mousePos[0] > 375 and mousePos[0] < 435 and mousePos[1] > 495 and mousePos[1] < 555:
-            clickedButton = 'Dill'
-            takeABet = True
-            gamerCardCount = 0
-            dealerCardCount = 0
-            buttonQuantity = 0
+        if takeABet == False:
+
+            if mousePos[0] > 375 and mousePos[0] < 435 and mousePos[1] > 495 and mousePos[1] < 555 and \
+                            gamerBet != 0 and i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                clickedButton = 'Dill'
+                takeABet = True
+                gamerDepozit -= gamerBet
+                gamerCardCount = 0
+                dealerCardCount = 0
+                buttonQuantity = 0
+
+            if mousePos[0] > 32 and mousePos[0] < 70 and mousePos[1] > 447 and mousePos[1] < 478 and \
+                            i.type == pygame.MOUSEBUTTONDOWN:
+                if i.button == 1 and chipsCount < 5 and gamerDepozit >= gamerBet + 1:
+                    chipName = "1"
+                    chipsCount += 1
+                elif i.button == 3 and chipsCount > 0:
+                    chipsCount -= 1
+
+            if mousePos[0] > 73 and mousePos[0] < 110 and mousePos[1] > 466 and mousePos[1] < 498 and \
+                            i.type == pygame.MOUSEBUTTONDOWN:
+                if i.button == 1 and chipsCount < 5 and gamerDepozit >= gamerBet + 5:
+                    chipName = "5"
+                    chipsCount += 1
+                elif i.button == 3 and chipsCount > 0:
+                    chipsCount -= 1
+
+            if mousePos[0] > 114 and mousePos[0] < 150 and mousePos[1] > 481 and mousePos[1] < 514 and \
+                            i.type == pygame.MOUSEBUTTONDOWN:
+                if i.button == 1 and chipsCount < 5 and gamerDepozit >= gamerBet + 25:
+                    chipName = "25"
+                    chipsCount += 1
+                elif i.button == 3 and chipsCount > 0:
+                    chipsCount -= 1
+
+            if mousePos[0] > 155 and mousePos[0] < 190 and mousePos[1] > 494 and mousePos[1] < 527 and \
+                            i.type == pygame.MOUSEBUTTONDOWN:
+                if i.button == 1 and chipsCount < 5 and gamerDepozit >= gamerBet + 100:
+                    chipName = "100"
+                    chipsCount += 1
+                elif i.button == 3 and chipsCount > 0:
+                    chipsCount -= 1
 
     window.blit(gameScreen, (0, 0))
     pygame.display.flip()
