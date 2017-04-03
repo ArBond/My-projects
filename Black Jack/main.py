@@ -14,6 +14,7 @@ class Cards:
         self.x = xpos
         self.y = ypos
         self.bitmap = pygame.image.load(filename)
+        self.bitmap.set_colorkey((0, 0, 0))
 
     def render(self):
         gameScreen.blit(self.bitmap, (self.x, self.y))
@@ -115,7 +116,7 @@ betText = pygame.font.SysFont("Consolas", 16, True)
 gamerSumText = pygame.font.SysFont("Consolas", 16)
 dealerSumText = pygame.font.SysFont("Consolas", 16)
 
-whoWinText = pygame.font.SysFont("Consolas", 26, True)
+whoWinText = pygame.font.SysFont("Consolas", 30, True)
 
 deal = Buttons(375, 495, "Images\Buttons\deal.png")
 dealActive = Buttons(375, 495, "Images\Buttons\deal active.png")
@@ -146,6 +147,7 @@ lightDealerA = 0
 canFinish = False
 needFinish = False
 finishDelayCounter = 0
+cardAnimationCount = 0
 
 gamerCard1IsRender = False
 gamerCard2IsRender = False
@@ -174,42 +176,42 @@ while True:
 
     mousePos = pygame.mouse.get_pos()
 
-    if gamerSum > 21 and canFinish == True:
+    if gamerSum >= 21 and canFinish == True:
         needFinish = True
 
     if canFinish == True and needFinish == True:
 
         if gamerSum > 21:
-            gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 255)), (280, 195))
+            gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 0)), (280, 195))
         elif gamerSum == 21 and dealerSum != 21 and gamerCardCount == 2:
-            gameScreen.blit(whoWinText.render("Black Jack. you WINNER!", 1, (255, 255, 255)), (280, 195))
+            gameScreen.blit(whoWinText.render("Black Jack. you WINNER!", 1, (255, 255, 0)), (280, 195))
             if finishDelayCounter == 0:
                 gamerDepozit += gamerBet * 3
         elif dealerSum > 21:
-            gameScreen.blit(whoWinText.render("you WINNER!", 1, (255, 255, 255)), (280, 195))
+            gameScreen.blit(whoWinText.render("you WINNER!", 1, (255, 255, 0)), (280, 195))
             if finishDelayCounter == 0:
                 gamerDepozit += gamerBet * 2
         elif dealerSum == 21 and gamerSum != 21:
             if insuranceIsActive == True and dealerCardCount == 2:
-                gameScreen.blit(whoWinText.render("Insuranse", 1, (255, 255, 255)), (280, 195))
+                gameScreen.blit(whoWinText.render("Insuranse", 1, (255, 255, 0)), (280, 195))
                 if finishDelayCounter == 0:
                     gamerDepozit += gamerBet
             else:
-                gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 255)), (280, 195))
+                gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 0)), (280, 195))
         elif gamerSum > dealerSum and dealerSum >= 17:
-            gameScreen.blit(whoWinText.render("you WINNER!", 1, (255, 255, 255)), (280, 195))
+            gameScreen.blit(whoWinText.render("you WINNER!", 1, (255, 255, 0)), (280, 195))
             if finishDelayCounter == 0:
                 gamerDepozit += gamerBet * 2
         elif gamerSum < dealerSum and dealerSum >= 17:
-            gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 255)), (280, 195))
+            gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 0)), (280, 195))
         elif dealerSum >= 17:
-            gameScreen.blit(whoWinText.render("draw!", 1, (255, 255, 255)), (280, 195))
+            gameScreen.blit(whoWinText.render("draw!", 1, (255, 255, 0)), (280, 195))
             if finishDelayCounter == 0:
                 gamerDepozit += gamerBet
 
         finishDelayCounter += 1
 
-        if finishDelayCounter > 100:
+        if finishDelayCounter > 50:
 
             time.sleep(2)
             gamerCardCount = -1
@@ -228,6 +230,7 @@ while True:
             canFinish = False
             needFinish = False
             finishDelayCounter = 0
+            cardAnimationCount = 0
 
             gamerCard1IsRender = False
             gamerCard2IsRender = False
@@ -282,28 +285,28 @@ while True:
             if chipsCount == 1:
                 rendersChip1 = Chips(389, 400, "Images\Chips\\" + chipName + ".png")
                 valueOfChip1 = int(chipName)
-                doublesChip1 = Chips(369, 400, "Images\Chips\\" + chipName + ".png")
-                insuranceChip1 = Chips(200, 90, "Images\Chips\\" + chipName + ".png")
+                doublesChip1 = Chips(150, 505, "Images\Chips\\" + chipName + ".png")
+                insuranceChip1 = Chips(150, 505, "Images\Chips\\" + chipName + ".png")
             elif chipsCount == 2:
                 rendersChip2 = Chips(389, 395, "Images\Chips\\" + chipName + ".png")
                 valueOfChip2 = int(chipName)
-                doublesChip2 = Chips(369, 395, "Images\Chips\\" + chipName + ".png")
-                insuranceChip2 = Chips(200, 85, "Images\Chips\\" + chipName + ".png")
+                doublesChip2 = Chips(150, 500, "Images\Chips\\" + chipName + ".png")
+                insuranceChip2 = Chips(150, 500, "Images\Chips\\" + chipName + ".png")
             elif chipsCount == 3:
                 rendersChip3 = Chips(389, 390, "Images\Chips\\" + chipName + ".png")
                 valueOfChip3 = int(chipName)
-                doublesChip3 = Chips(369, 390, "Images\Chips\\" + chipName + ".png")
-                insuranceChip3 = Chips(200, 80, "Images\Chips\\" + chipName + ".png")
+                doublesChip3 = Chips(150, 495, "Images\Chips\\" + chipName + ".png")
+                insuranceChip3 = Chips(150, 495, "Images\Chips\\" + chipName + ".png")
             elif chipsCount == 4:
                 rendersChip4 = Chips(389, 385, "Images\Chips\\" + chipName + ".png")
                 valueOfChip4 = int(chipName)
-                doublesChip4 = Chips(369, 385, "Images\Chips\\" + chipName + ".png")
-                insuranceChip4 = Chips(200, 75, "Images\Chips\\" + chipName + ".png")
+                doublesChip4 = Chips(150, 490, "Images\Chips\\" + chipName + ".png")
+                insuranceChip4 = Chips(150, 490, "Images\Chips\\" + chipName + ".png")
             elif chipsCount == 5:
                 rendersChip5 = Chips(389, 380, "Images\Chips\\" + chipName + ".png")
                 valueOfChip5 = int(chipName)
-                doublesChip5 = Chips(369, 380, "Images\Chips\\" + chipName + ".png")
-                insuranceChip5 = Chips(200, 70, "Images\Chips\\" + chipName + ".png")
+                doublesChip5 = Chips(150, 485, "Images\Chips\\" + chipName + ".png")
+                insuranceChip5 = Chips(150, 485, "Images\Chips\\" + chipName + ".png")
 
             chipName = 'none'
 
@@ -353,10 +356,10 @@ while True:
         priceOfGamerCard2, lightGamerA = determineCardPrice(gamerSum, cardDesk[cardCount + 2][0], lightGamerA)
         gamerSum += priceOfGamerCard2
 
-        dealerCard2 = Cards(410, 80, "Images\Cards\\" + cardDesk[cardCount + 3][0] + cardDesk[cardCount + 3][1] + ".png")
+        dealerCard2 = Cards(410, 80, "Images\Cards\\Back.png")
+        realDealerCard2 = Cards(410, 80, "Images\Cards\\" + cardDesk[cardCount + 3][0] + cardDesk[cardCount + 3][1] + ".png")
         valueOfDealerCard2 = cardDesk[cardCount + 3][0]
         priceOfDealerCard2, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount + 3][0], lightDealerA)
-        dealerSum += priceOfDealerCard2
 
         gamerCardCount = 2
         dealerCardCount = 2
@@ -408,55 +411,82 @@ while True:
                 lightGamerA = 0
 
     if clickedButton == 'Stand':
-        while dealerSum < 17:
-            dealerCardCount += 1
-            cardCount += 1
-            if dealerCardCount == 3:
-                dealerCard3 = Cards(430, 80, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
-                priceOfDealerCard3, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
-                dealerSum += priceOfDealerCard3
-                if dealerSum > 21 and lightDealerA == 1:
-                    dealerSum -= 10
-                    lightDealerA = 0
-            elif dealerCardCount == 4:
-                dealerCard4 = Cards(450, 80, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
-                priceOfDealerCard4, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
-                dealerSum += priceOfDealerCard4
-                if dealerSum > 21 and lightDealerA == 1:
-                    dealerSum -= 10
-                    lightDealerA = 0
-            elif dealerCardCount == 5:
-                dealerCard5 = Cards(470, 80, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
-                priceOfDealerCard5, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
-                dealerSum += priceOfDealerCard5
-                if dealerSum > 21 and lightDealerA == 1:
-                    dealerSum -= 10
-                    lightDealerA = 0
-            elif dealerCardCount == 6:
-                dealerCard6 = Cards(490, 80, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
-                priceOfDealerCard6, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
-                dealerSum += priceOfDealerCard6
-                if dealerSum > 21 and lightDealerA == 1:
-                    dealerSum -= 10
-                    lightDealerA = 0
-            elif dealerCardCount == 7:
-                dealerCard7 = Cards(510, 80, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
-                priceOfDealerCard7, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
-                dealerSum += priceOfDealerCard7
-                if dealerSum > 21 and lightDealerA == 1:
-                    dealerSum -= 10
-                    lightDealerA = 0
-            elif dealerCardCount == 8:
-                dealerCard8 = Cards(530, 80, "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
-                priceOfDealerCard8, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0], lightDealerA)
-                dealerSum += priceOfDealerCard8
-                if dealerSum > 21 and lightDealerA == 1:
-                    dealerSum -= 10
-                    lightDealerA = 0
-        if dealerCardCount == 2:
-            canFinish = True
-        clickedButton = 'none'
-        needFinish = True
+        cardAnimationCount += 1
+        if cardAnimationCount == 1:
+            dealerCard2 = Cards(410, 80, "Images\Cards\\Animation1.png")
+        elif cardAnimationCount == 2:
+            dealerCard2 = Cards(415, 80, "Images\Cards\\Animation2.png")
+        elif cardAnimationCount == 3:
+            dealerCard2 = Cards(425, 80, "Images\Cards\\Animation3.png")
+        elif cardAnimationCount == 4:
+            dealerCard2 = Cards(425, 80, "Images\Cards\\Animation4.png")
+        elif cardAnimationCount == 5:
+            dealerCard2 = Cards(420, 80, "Images\Cards\\Animation5.png")
+        elif cardAnimationCount == 6:
+            dealerCard2 = realDealerCard2
+        elif cardAnimationCount == 9:
+            dealerSum += priceOfDealerCard2
+            while dealerSum < 17:
+                dealerCardCount += 1
+                cardCount += 1
+                if dealerCardCount == 3:
+                    dealerCard3 = Cards(430, 80,
+                                        "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                    priceOfDealerCard3, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0],
+                                                                          lightDealerA)
+                    dealerSum += priceOfDealerCard3
+                    if dealerSum > 21 and lightDealerA == 1:
+                        dealerSum -= 10
+                        lightDealerA = 0
+                elif dealerCardCount == 4:
+                    dealerCard4 = Cards(450, 80,
+                                        "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                    priceOfDealerCard4, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0],
+                                                                          lightDealerA)
+                    dealerSum += priceOfDealerCard4
+                    if dealerSum > 21 and lightDealerA == 1:
+                        dealerSum -= 10
+                        lightDealerA = 0
+                elif dealerCardCount == 5:
+                    dealerCard5 = Cards(470, 80,
+                                        "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                    priceOfDealerCard5, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0],
+                                                                          lightDealerA)
+                    dealerSum += priceOfDealerCard5
+                    if dealerSum > 21 and lightDealerA == 1:
+                        dealerSum -= 10
+                        lightDealerA = 0
+                elif dealerCardCount == 6:
+                    dealerCard6 = Cards(490, 80,
+                                        "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                    priceOfDealerCard6, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0],
+                                                                          lightDealerA)
+                    dealerSum += priceOfDealerCard6
+                    if dealerSum > 21 and lightDealerA == 1:
+                        dealerSum -= 10
+                        lightDealerA = 0
+                elif dealerCardCount == 7:
+                    dealerCard7 = Cards(510, 80,
+                                        "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                    priceOfDealerCard7, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0],
+                                                                          lightDealerA)
+                    dealerSum += priceOfDealerCard7
+                    if dealerSum > 21 and lightDealerA == 1:
+                        dealerSum -= 10
+                        lightDealerA = 0
+                elif dealerCardCount == 8:
+                    dealerCard8 = Cards(530, 80,
+                                        "Images\Cards\\" + cardDesk[cardCount][0] + cardDesk[cardCount][1] + ".png")
+                    priceOfDealerCard8, lightDealerA = determineCardPrice(dealerSum, cardDesk[cardCount][0],
+                                                                          lightDealerA)
+                    dealerSum += priceOfDealerCard8
+                    if dealerSum > 21 and lightDealerA == 1:
+                        dealerSum -= 10
+                        lightDealerA = 0
+            if dealerCardCount == 2:
+                canFinish = True
+            clickedButton = 'none'
+            needFinish = True
 
     if clickedButton == 'Double':
 
@@ -482,25 +512,70 @@ while True:
         clickedButton = 'none'
 
     if doublesRender == True:
+        if doublesChip1.x < 340:
+            doublesChip1.x += 40
+            doublesChip1.y -= 20
+        else:
+            doublesChip1.x = 369
+            doublesChip1.y = 400
         doublesChip1.render()
         if chipsCount > 1:
+            if doublesChip2.x < 340:
+                doublesChip2.x += 40
+                doublesChip2.y -= 20
+            else:
+                doublesChip2.x = 369
+                doublesChip2.y = 395
             doublesChip2.render()
             if chipsCount > 2:
+                if doublesChip3.x < 340:
+                    doublesChip3.x += 40
+                    doublesChip3.y -= 20
+                else:
+                    doublesChip3.x = 369
+                    doublesChip3.y = 390
                 doublesChip3.render()
                 if chipsCount > 3:
+                    if doublesChip4.x < 340:
+                        doublesChip4.x += 40
+                        doublesChip4.y -= 20
+                    else:
+                        doublesChip4.x = 369
+                        doublesChip4.y = 385
                     doublesChip4.render()
                     if chipsCount > 4:
+                        if doublesChip5.x < 340:
+                            doublesChip5.x += 40
+                            doublesChip5.y -= 20
+                        else:
+                            doublesChip5.x = 369
+                            doublesChip5.y = 380
                         doublesChip5.render()
 
     if insuranceIsActive == True:
+        if insuranceChip1.y > 150:
+            insuranceChip1.x += 20
+            insuranceChip1.y -= 70
         insuranceChip1.render()
         if chipsCount > 1:
+            if insuranceChip2.y > 145:
+                insuranceChip2.x += 20
+                insuranceChip2.y -= 70
             insuranceChip2.render()
             if chipsCount > 2:
+                if insuranceChip3.y > 140:
+                    insuranceChip3.x += 20
+                    insuranceChip3.y -= 70
                 insuranceChip3.render()
                 if chipsCount > 3:
+                    if insuranceChip4.y > 135:
+                        insuranceChip4.x += 20
+                        insuranceChip4.y -= 70
                     insuranceChip4.render()
                     if chipsCount > 4:
+                        if insuranceChip5.y > 130:
+                            insuranceChip5.x += 20
+                            insuranceChip5.y -= 70
                         insuranceChip5.render()
 
     if gamerCardCount > 0:
@@ -541,7 +616,12 @@ while True:
                         gamerCard3.render()
                         canFinish = True
                         if doublesRender == True:
-                            needFinish = True
+                            buttonQuantity = -1
+                            if gamerSum <= 21:
+                                clickedButton = 'Stand'
+                                canFinish = False
+                            else:
+                                needFinish = True
                 elif gamerCardCount > 2:
                     gamerCard3.render()
 
@@ -638,6 +718,7 @@ while True:
                     backCard.x = 800
                     backCard.y = 0
                     dealerCard2IsRender = True
+                    canFinish = True
             elif gamerCard2IsRender == True:
                 dealerCard2.render()
 
