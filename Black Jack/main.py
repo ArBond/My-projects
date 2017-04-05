@@ -100,6 +100,100 @@ def determineCardPrice(sum, card, countA):
         return int(card), countA
 
 
+'''     Инво окно          Инво окно          Инво окно          Инво окно          Инво окно          Инво окно    '''
+
+def infoScree():
+    print("Инфо")
+
+
+
+
+
+'''   Стартовое окно        Стартовое окно         Стартовое окно         Стартовое окно         Стартовое окно  '''
+
+
+def startScreen():
+
+    startScreen = pygame.Surface((800, 600))
+
+    stringWelcome = pygame.font.SysFont("Consolas", 50, True)
+    infoButton = pygame.font.SysFont("Consolas", 24, True)
+    gameButton = pygame.font.SysFont("Consolas", 35, True)
+
+    blueOfStringToContinue = 0
+
+    depositString = ""
+    enteringDeposit = pygame.font.SysFont("Arial", 40)
+
+    redOfRect = 0
+    greenOfRect = 255
+    windowForInter = 'none'
+    widthOfWindowLine = 2
+
+    while True:
+
+        startScreen.blit(pygame.image.load("Images\Backgrounds\Start screen.png"), (0, 0))
+
+        startScreen.blit(stringWelcome.render("Добро пожаловать!", 1, (255, 255, 255)), (170, 30))
+
+        pygame.draw.rect(startScreen, (255, 255, 255), [325, 220, 160, 50])
+        pygame.draw.rect(startScreen, (redOfRect, greenOfRect, 0), [325, 220, 160, 50], widthOfWindowLine)
+        startScreen.blit(enteringDeposit.render(depositString, 1, (0, 0, 0)), (330, 220))
+
+        startScreen.blit(gameButton.render("Начать", 1, (255, 255, blueOfStringToContinue)), (350, 360))
+
+        startScreen.blit(infoButton.render("Описание", 1, (255, 255, 255)), (340, 560))
+
+        for i in pygame.event.get():
+
+            if i.type == pygame.QUIT:
+                sys.exit()
+
+            if i.type == pygame.KEYDOWN and windowForInter == 'center':
+                if (i.key >= pygame.K_0 and i.key <= pygame.K_9 or i.key >= pygame.K_KP0 and i.key <= pygame.K_KP9) \
+                        and len(depositString) < 8:
+                    depositString += i.unicode
+                elif i.key == pygame.K_BACKSPACE:
+                    depositString = depositString[:-1]
+
+            mousePos = pygame.mouse.get_pos()
+
+            if mousePos[0] > 325 and mousePos[0] < 485 and mousePos[1] > 220 and mousePos[1] < 275 and \
+                            i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                windowForInter = 'center'
+                widthOfWindowLine = 4
+                redOfRect = 0
+                greenOfRect = 255
+                depositString = ""
+
+            if mousePos[0] > 350 and mousePos[0] < 470 and mousePos[1] > 365 and mousePos[1] < 390:
+                blueOfStringToContinue = 0
+                if i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
+                    if depositString != '' and int(str(''.join(depositString))) != 0:
+                        return int(str(''.join(depositString)))
+                    else:
+                        redOfRect = 200
+                        greenOfRect = 0
+                        widthOfWindowLine = 4
+            else:
+                blueOfStringToContinue = 150
+
+        window.blit(startScreen, (0, 0))
+        pygame.display.flip()
+
+
+
+
+'''     Закончились деньги           Закончились деньги           Закончились деньги         Закончились деньги    '''
+
+
+def whenMoneyIOut():
+
+    whenMoneyIOutScreen = pygame.Surface((800, 600))
+
+    animation1 = pygame.image.load("Images\Backgrounds\start screen.png"), (0, 0)
+
+
 
 
 
@@ -130,44 +224,15 @@ chip5Active = Chips(73, 466, "Images\Chips\\5 active.png")
 chip25Active = Chips(114, 481, "Images\Chips\\25 active.png")
 chip100Active = Chips(155, 494, "Images\Chips\\100 active.png")
 
-cardCount = 0
-gamerCardCount = -1
-dealerCardCount = -1
-gamerSum = 0
+canFinish = True
+needFinish = True
 dealerSum = 0
-takeABet = False
-buttonQuantity = -1
-clickedButton = 'none'
-insuranceIsActive = False
-chipsCount = 0
-chipName = 'none'
-doublesRender = False
-lightGamerA = 0
-lightDealerA = 0
-canFinish = False
-needFinish = False
+gamerSum = 0
+gamerCardCount = 0
 finishDelayCounter = 0
-cardAnimationCount = 0
+cardCount = 0
 
-gamerCard1IsRender = False
-gamerCard2IsRender = False
-gamerCard3IsRender = False
-gamerCard4IsRender = False
-gamerCard5IsRender = False
-gamerCard6IsRender = False
-gamerCard7IsRender = False
-gamerCard8IsRender = False
-
-dealerCard1IsRender = False
-dealerCard2IsRender = False
-dealerCard3IsRender = False
-dealerCard4IsRender = False
-dealerCard5IsRender = False
-dealerCard6IsRender = False
-dealerCard7IsRender = False
-dealerCard8IsRender = False
-
-gamerDepozit = 100
+gamerDepozit = -1
 gamerBet = 0
 
 while True:
@@ -195,7 +260,7 @@ while True:
             if insuranceIsActive == True and dealerCardCount == 2:
                 gameScreen.blit(whoWinText.render("Insuranse", 1, (255, 255, 0)), (280, 195))
                 if finishDelayCounter == 0:
-                    gamerDepozit += gamerBet
+                    gamerDepozit += gamerBet * 2
             else:
                 gameScreen.blit(whoWinText.render("you LOOSER!", 1, (255, 255, 0)), (280, 195))
         elif gamerSum > dealerSum and dealerSum >= 17:
@@ -209,9 +274,18 @@ while True:
             if finishDelayCounter == 0:
                 gamerDepozit += gamerBet
 
+        if gamerDepozit == -1:
+            gamerDepozit = startScreen()
+            finishDelayCounter = 49
+
         finishDelayCounter += 1
 
-        if finishDelayCounter > 50:
+        if finishDelayCounter == 50:
+
+            if gamerDepozit == 0:
+                gamerDepozit = whenMoneyIOut()
+                if gamerDepozit == 0:
+                    startScreen()
 
             time.sleep(2)
             gamerCardCount = -1
@@ -231,6 +305,7 @@ while True:
             needFinish = False
             finishDelayCounter = 0
             cardAnimationCount = 0
+            chipName = 'none'
 
             gamerCard1IsRender = False
             gamerCard2IsRender = False
@@ -932,6 +1007,7 @@ while True:
         if buttonQuantity == 5 and mousePos[0] > 505 and mousePos[0] < 505 + 60 and \
                         mousePos[1] > 495 and mousePos[1] < 555 and i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:
             clickedButton = 'Insurance'
+            gamerDepozit -= gamerBet
 
         if takeABet == False:
 
